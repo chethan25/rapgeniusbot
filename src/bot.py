@@ -33,28 +33,45 @@ def main():
 
                 filename = f"lyrics_{new_artist_name}_{new_song_name}.json"
 
-                dest = os.path.abspath(f"lyrics/{filename}")
+                dest_path = os.path.abspath(f"lyrics/{filename}")
 
-                if os.path.isfile(dest):
-                    with open(dest) as f:
-                        data = json.load(f)
-                        comment.reply(data['lyrics'])
-                        add_entry(comment)
-                        print('posted')
-                        break
+                if os.path.isfile(dest_path):
+
+                    if option == 'lyrics':
+                        post_lyrics(dest_path, comment)
+                    elif option == 'short info':
+                        post_short_track_info(dest_path, comment)
+
+                    break
 
                 else:
                     genius.search_song(song_name,
                                        artist=artist_name, get_full_info=True).save_lyrics()
 
-                    shutil.move(filename, dest)
+                    shutil.move(filename, dest_path)
 
-                    with open(dest) as f:
-                        data = json.load(f)
-                        comment.reply(data['lyrics'])
-                        add_entry(comment)
-                        print('posted')
-                        break
+                    if option == 'lyrics':
+                        post_lyrics(dest_path, comment)
+                    elif option == 'short info':
+                        post_short_track_info(dest_path, comment)
+
+                    break
+
+
+def post_lyrics(d_path, comment):
+    with open(d_path) as f:
+        data = json.load(f)
+        comment.reply(data['lyrics'])
+        add_entry(comment)
+        print('posted')
+
+
+def post_short_track_info(d_path, comment):
+    with open(d_path) as f:
+        data = json.load(f)
+        comment.reply(f"Song Name - {data['title']}")
+        add_entry(comment)
+        print('posted')
 
 
 def is_added(comment_id):
