@@ -44,8 +44,10 @@ def main():
                 song_name = comment_list[2].strip().lower()
                 option = comment_list[3].strip().lower()
 
-                new_artist_name = artist_name.replace(" ", "")
-                new_song_name = song_name.replace(" ", "")
+                new_artist_name = artist_name.replace(
+                    " ", "").replace("'", "").replace("-", "").replace('"', "")
+                new_song_name = song_name.replace(" ", "").replace(
+                    "'", "").replace("(", "").replace(")", "")
 
                 # Construct the json filename.
                 filename = f"lyrics_{new_artist_name}_{new_song_name}.json"
@@ -60,6 +62,8 @@ def main():
                         post_lyrics(dest_path, comment)
                     elif option == 'short info':
                         post_short_song_info(dest_path, comment)
+                    elif option == 'long info':
+                        post_long_song_info(dest_path, comment)
 
                     break
 
@@ -76,6 +80,8 @@ def main():
                         post_lyrics(dest_path, comment)
                     elif option == 'short info':
                         post_short_song_info(dest_path, comment)
+                    elif option == 'long info':
+                        post_long_song_info(dest_path, comment)
 
                     break
 
@@ -97,30 +103,65 @@ def post_short_song_info(d_path, comment):
     with open(d_path) as f:
         data = json.load(f)
 
-        title = data['title']
+    title = data['title']
 
-        primary_artist = data['primary_artist']['name']
+    primary_artist = data['primary_artist']['name']
 
-        featured_artists_list = []
-        for artist in data['featured_artists']:
-            featured_artists_list.append(artist['name'])
-        featured_artists = ", ".join(featured_artists_list)
+    featured_artists_list = []
+    for artist in data['featured_artists']:
+        featured_artists_list.append(artist['name'])
+    featured_artists = ", ".join(featured_artists_list)
 
-        album = data['album']['name']
+    album = data['album']['name']
 
-        release_date = data['release_date_for_display']
+    release_date = data['release_date_for_display']
 
-        producer_artists_list = []
-        for artist in data['producer_artists']:
-            producer_artists_list.append(artist['name'])
-        producer_artists = ", ".join(producer_artists_list)
+    producer_artists_list = []
+    for artist in data['producer_artists']:
+        producer_artists_list.append(artist['name'])
+    producer_artists = ", ".join(producer_artists_list)
 
-        description = data['description']['plain']
+    description = data['description']['plain']
 
-        comment.reply(
-            f"Song - {title}\n\nArtist - {primary_artist}\n\nFeatured Artists - {featured_artists}\n\nAlbum - {album}\n\nRelease Date - {release_date}\n\nProduced by - {producer_artists}\n\nDescription - {description}")
-        add_entry(comment)
-        print('posted')
+    comment.reply(
+        f"Song - {title}\n\nArtist - {primary_artist}\n\nFeatured Artists - {featured_artists}\n\nAlbum - {album}\n\nRelease Date - {release_date}\n\nProduced by - {producer_artists}\n\nDescription - {description}")
+    add_entry(comment)
+    print('posted')
+
+
+def post_long_song_info(d_path, comment):
+    """
+    Parse json file for songs metadata and reply
+    long info to the comment.
+    """
+    with open(d_path) as f:
+        data = json.load(f)
+
+    writer_artists_list = []
+    wa_list = data.get('writer_artists')
+    for wa in wa_list:
+        writer_artists_list.append(wa.get('name'))
+        writer_artists = ", ".join(writer_artists_list)
+
+    custom_performances_dict = {}
+    custom_performances_list = data.get('custom_performances')
+    for custom_performance in custom_performances_list:
+        artists_list = custom_performance.get('artists')
+        for artist in artists_list:
+            custom_performances_dict.setdefault(
+                custom_performance.get('label'), []).append(artist.get('name'))
+
+    custom_performance_str = ''
+    for key, value in custom_performances_dict.items():
+        custom_performance_str += f"{key} - {', '.join(value)}" + '\n\n'
+
+    recorded_at = data.get('recording_location')
+
+    comment.reply(
+        f"Writer Artists - {writer_artists}\
+            \n\n{custom_performance_str}\n\nRecorded At - {recorded_at}")
+    add_entry(comment)
+    print('posted')
 
 
 def is_added(comment_id):
