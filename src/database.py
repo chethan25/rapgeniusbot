@@ -1,11 +1,18 @@
+# -*- coding: utf-8 -*-
+"""
+Module to connect to mysql database which is used
+to store comment ids.
+"""
 import os
+
 from peewee import *
 
 
-mysqlpasswd = os.environ.get("MYSQL_PASSWORD")
-
-db = MySQLDatabase("rapgeniusbot", host="localhost",
-                   user="root", passwd=mysqlpasswd)
+# Initializing the database.
+db = MySQLDatabase("rapgeniusbot",
+                   host="localhost",
+                   user="root",
+                   passwd=os.environ.get("MYSQL_PASSWORD"))
 
 
 class Comments(Model):
@@ -17,4 +24,5 @@ class Comments(Model):
 
 db.connect()
 
+# The True flag won't alarm if table exists.
 Comments.create_table(True)
