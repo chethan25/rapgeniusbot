@@ -64,7 +64,8 @@ def main():
                         post_short_song_info(dest_path, comment)
                     elif option == 'long info':
                         post_long_song_info(dest_path, comment)
-
+                    elif option == 'relations':
+                        post_song_relations(dest_path, comment)
                     break
 
                 else:
@@ -82,7 +83,8 @@ def main():
                         post_short_song_info(dest_path, comment)
                     elif option == 'long info':
                         post_long_song_info(dest_path, comment)
-
+                    elif option == 'relations':
+                        post_song_relations(dest_path, comment)
                     break
 
 
@@ -90,7 +92,8 @@ def post_lyrics(d_path, comment):
     """Parse json file for songs lyrics and reply lyrics to the comment."""
     with open(d_path) as f:
         data = json.load(f)
-        comment.reply(data['lyrics'])
+        comment.reply(
+            f"**LYRICS**\n\n---\n\n{data.get('lyrics', 'Lyrics Unavailable')}")
         add_entry(comment)
         print('posted')
 
@@ -123,8 +126,11 @@ def post_short_song_info(d_path, comment):
 
     description = data['description']['plain']
 
-    comment.reply(
-        f"Song - {title}\n\nArtist - {primary_artist}\n\nFeatured Artists - {featured_artists}\n\nAlbum - {album}\n\nRelease Date - {release_date}\n\nProduced by - {producer_artists}\n\nDescription - {description}")
+    comment.reply(f"**TRACK INFO**\n\n---\n\n**Song** - {title}\n\n**Artist** - {primary_artist}\
+            \n\n**Featured Artist(s)** - {featured_artists}\
+            \n\n**Album** - {album}\n\n**Release Date** - {release_date}\
+            \n\n**Produced by** - {producer_artists}\
+            \n\n**Description** - {description}")
     add_entry(comment)
     print('posted')
 
@@ -153,13 +159,40 @@ def post_long_song_info(d_path, comment):
 
     custom_performance_str = ''
     for key, value in custom_performances_dict.items():
-        custom_performance_str += f"{key} - {', '.join(value)}" + '\n\n'
+        custom_performance_str += f"**{key}** - {', '.join(value)}" + '\n\n'
 
     recorded_at = data.get('recording_location')
+    if recorded_at == None:
+        recorded_at = ""
 
     comment.reply(
-        f"Writer Artists - {writer_artists}\
-            \n\n{custom_performance_str}\n\nRecorded At - {recorded_at}")
+        f"**TRACK INFO**\n\n---\n\n**Writer Artists** - {writer_artists}\
+            \n\n{custom_performance_str}\n\n**Recorded At** - {recorded_at}")
+    add_entry(comment)
+    print('posted')
+
+
+def post_song_relations(d_path, comment):
+    """
+    Parse json file for song relationships and reply
+    the same to the comment.
+    """
+    with open(d_path) as f:
+        data = json.load(f)
+
+    song_relationships_dict = {}
+    song_relationships_list = data.get('song_relationships')
+    for song_relationship in song_relationships_list:
+        song_relationship.get('type')
+        song_list = song_relationship.get('songs')
+        for song in song_list:
+            song_relationships_dict.setdefault(song_relationship.get(
+                'type'), []).append(song.get('full_title'))
+    song_relationships_str = ''
+    for key, value in song_relationships_dict.items():
+        song_relationships_str += f"**{key.title().replace('_', ' ')}** - {', '.join(value)}" + '\n\n'
+
+    comment.reply(f"**TRACK RELATIONSHPS**\n\n---\n\n{song_relationships_str}")
     add_entry(comment)
     print('posted')
 
