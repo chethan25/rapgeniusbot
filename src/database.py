@@ -9,10 +9,10 @@ from peewee import *
 
 
 # Initializing the database.
-db = MySQLDatabase("rapgeniusbot",
-                   host="localhost",
-                   user="root",
-                   passwd=os.environ.get("MYSQL_PASSWORD"))
+db = MySQLDatabase('rapgeniusbot',
+                   host='localhost',
+                   user='root',
+                   passwd=os.environ.get('MYSQL_PASSWORD'))
 
 
 class Comments(Model):
