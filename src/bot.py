@@ -67,7 +67,7 @@ def main():
                 new_artist_name = artist_name.replace(
                     " ", "").replace("'", "").replace("-", "").replace('"', "")
                 new_song_name = song_name.replace(" ", "").replace(
-                    "'", "").replace("(", "").replace(")", "").replace("&, "")
+                    "'", "").replace("(", "").replace(")", "").replace("&", "")
 
                 # Construct the json filename.
                 filename = f"lyrics_{new_artist_name}_{new_song_name}.json"
@@ -298,5 +298,5 @@ def flush_db():
 if __name__ == "__main__":
     try:
         main()
-    except RequestException:
+    except prawcore.exceptions.RequestException:
         print('There was an ambiguous exception that occurred while handling your request')
