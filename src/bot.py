@@ -20,7 +20,12 @@ import database as db
 
 def main():
     """
-    Login into reddit
+    The main function.
+
+    Configures praw and authorizes genius api, gets latest comments from the
+    subreddits, filters out comments that have already been replied. Parses
+    comment for artist name, song name, option and the specified options
+    function is called.
     """
     # Configuring PRAW.
     reddit = praw.Reddit(
@@ -29,26 +34,21 @@ def main():
     # Authorize access to the genius api using client access token.
     genius = lyricsgenius.Genius(os.environ.get('GENIUS_TOKEN'))
 
+    # Configure logger
     logging.basicConfig(filename='bot.log', filemode='w',
-                        format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+                        format='%(asctime)s - %(levelname)s - %(message)s',
+                        level=logging.INFO)
 
-    # Get authenticated users username.
-    bot_username = str(reddit.user.me())
-
-    # Subreddits that has access to the bot.
-    subreddit = reddit.subreddit('lukerken')
-
-    logging.info('Admin logged in')
+    logging.info('logging in')
 
     # Get the latest comments from the subreddit.
-    for comment in subreddit.stream.comments():
+    for comment in reddit.subreddit('lukerken').stream.comments(skip_existing=True):
         # Check if bot has already replied to the comment.
         if not is_added(comment):
             # Check if bots username is present in the comment.
-            if bot_username in comment.body:
+            if str(reddit.user.me()) in comment.body:
                 # Parse comments for song name, artist name and option.
                 comment_list = comment.body.split(',')
-
                 try:
                     artist_name = comment_list[1].strip().lower()
                     song_name = comment_list[2].strip().lower()
@@ -77,7 +77,6 @@ def main():
 
                 # Check if the json file is present in the lyrics directory.
                 if os.path.isfile(dest_path):
-
                     if option == 'lyrics':
                         post_lyrics(dest_path, comment)
                     elif option == 'short info':
@@ -86,53 +85,52 @@ def main():
                         post_long_song_info(dest_path, comment)
                     elif option == 'relations':
                         post_song_relations(dest_path, comment)
-
                 else:
                     try:
-                        # Save the songs json file.
+                        # Search Genius.com for the specified song
+                        # and save songs json file.
                         genius.search_song(song_name,
                                            artist=artist_name,
                                            get_full_info=True).save_lyrics()
-
                     except AttributeError:
+                        logging.info("Invalid Song Request")
                         print('Invalid Song Request')
                         continue
-
                     else:
                         for filename in os.listdir('.'):
                             if filename[-4:] == 'json':
                                 filename_list = re.split(r'[_]', filename)
 
                         artist_name = filename_list[1]
-                        song_name = filename_list[2]
-                        n_song_name = song_name[:-5]
+                        old_song_name = filename_list[2]
+                        song_name = old_song_name[:-5]
 
                         # Construct the json filename.
-                        filename = f"lyrics_{artist_name}_{n_song_name}.json"
+                        filename = f"lyrics_{artist_name}_{song_name}.json"
 
                         # Find the absolute path to json file.
                         dest_path = os.path.abspath(f"lyrics/{filename}")
 
-                    try:
-                        # Move json file to lyrics directory.
-                        shutil.move(filename, dest_path)
-                    except FileNotFoundError:
-                        logging.info('Invalid Song Request')
-                        print('Invalid Song Request')
-                        continue
+                        try:
+                            # Move json file to lyrics directory.
+                            shutil.move(filename, dest_path)
+                        except FileNotFoundError:
+                            logging.info('Invalid Song Request')
+                            print('Invalid Song Request')
+                            continue
 
-                    if option == 'lyrics':
-                        post_lyrics(dest_path, comment)
-                    elif option == 'short info':
-                        post_short_song_info(dest_path, comment)
-                    elif option == 'long info':
-                        post_long_song_info(dest_path, comment)
-                    elif option == 'relations':
-                        post_song_relations(dest_path, comment)
+                        if option == 'lyrics':
+                            post_lyrics(dest_path, comment)
+                        elif option == 'short info':
+                            post_short_song_info(dest_path, comment)
+                        elif option == 'long info':
+                            post_long_song_info(dest_path, comment)
+                        elif option == 'relations':
+                            post_song_relations(dest_path, comment)
 
 
 def post_lyrics(d_path, comment):
-    """Parse json file for songs lyrics and reply lyrics to the comment."""
+    """Parses json file for songs lyrics and replies lyrics to the comment."""
     try:
         with open(d_path) as f:
             data = json.load(f)
@@ -146,10 +144,7 @@ def post_lyrics(d_path, comment):
 
 
 def post_short_song_info(d_path, comment):
-    """
-    Parse json file for songs metadata and reply
-    short song info to the comment.
-    """
+    """Parses json file for songs metadata and replies short song info to the comment."""
     try:
         with open(d_path) as f:
             data = json.load(f)
@@ -169,7 +164,7 @@ def post_short_song_info(d_path, comment):
             album = ''
 
         release_date = data['release_date_for_display']
-        if release_date == None:
+        if release_date is None:
             release_date = ''
 
         producer_artists_list = []
@@ -197,10 +192,7 @@ def post_short_song_info(d_path, comment):
 
 
 def post_long_song_info(d_path, comment):
-    """
-    Parse json file for songs metadata and reply
-    long info to the comment.
-    """
+    """Parses json file for songs metadata and replies long info to the comment."""
     try:
         with open(d_path) as f:
             data = json.load(f)
@@ -225,7 +217,7 @@ def post_long_song_info(d_path, comment):
                 '\n\n'
 
         recorded_at = data.get('recording_location')
-        if recorded_at == None:
+        if recorded_at is None:
             recorded_at = ""
 
         comment.reply(
@@ -240,10 +232,7 @@ def post_long_song_info(d_path, comment):
 
 
 def post_song_relations(d_path, comment):
-    """
-    Parse json file for song relationships and reply
-    the same to the comment.
-    """
+    """Parses json file for song relationships and replies the same to the comment."""
     try:
         with open(d_path) as f:
             data = json.load(f)
@@ -272,7 +261,7 @@ def post_song_relations(d_path, comment):
 
 
 def is_added(comment_id):
-    """Check if comment id is present in the database."""
+    """Checks if comment id is present in the database."""
     try:
         comments1 = db.Comments.get(db.Comments.cid == comment_id)
         return True
@@ -281,7 +270,7 @@ def is_added(comment_id):
 
 
 def add_entry(comment_id):
-    """Add comment id to the database if it wasn't already in the database."""
+    """Adds comment id to the database if it wasn't already in the database."""
     if not is_added(comment_id):
         logging.info(f"Adding {comment_id}")
         print(f"Adding {comment_id}")
@@ -289,14 +278,31 @@ def add_entry(comment_id):
 
 
 def flush_db():
-    """Delete all comment ids from database."""
+    """Deletes all comment ids from the database."""
     coms = db.Comments.select()
     for com in coms:
         com.delete_instance()
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except prawcore.exceptions.RequestException:
-        print('There was an ambiguous exception that occurred while handling your request')
+    while True:
+        try:
+            main()
+        except prawcore.exceptions.RequestException:
+            logging.error("Error with the incomplete HTTP request")
+            print("Error with the incomplete HTTP request")
+        except prawcore.exceptions.ResponseException:
+            logging.error("Error with the completed HTTP request")
+            print("Error with the completed HTTP request")
+        except prawcore.exceptions.OAuthException:
+            logging.error("OAuth2 related error with the request")
+            print("OAuth2 related error with the request")
+        except praw.exceptions.RedditAPIException as exception:
+            logging.error(exception)
+            print(exception)
+        except Exception as err:
+            logging.error(err)
+            print(err)
+
+        logging.info("Retrying in 5 minutes")
+        time.sleep(60 * 5)
