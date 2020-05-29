@@ -297,9 +297,18 @@ if __name__ == "__main__":
         except prawcore.exceptions.OAuthException:
             logging.error("OAuth2 related error with the request")
             print("OAuth2 related error with the request")
+        except prawcore.exceptions.PrawcoreException as prawcoreerr:
+            logging.error(prawcoreerr)
+            print(prawcoreerr)
         except praw.exceptions.RedditAPIException as exception:
             logging.error(exception)
             print(exception)
+        except praw.exceptions.ClientException as clienterr:
+            logging.error(clienterr)
+            print(clienterr)
+        except praw.exceptions.PRAWException as prawerr:
+            logging.error(prawerr)
+            print(prawerr)
         except Exception as err:
             logging.error(err)
             print(err)
