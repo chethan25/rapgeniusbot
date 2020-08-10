@@ -59,6 +59,20 @@ def main():
                         logging.info('Invalid Option')
                         print('Invalid Option')
                         continue
+
+                    lyrics_suboption = ''
+                    if option == 'lyrics':
+                        lyrics_suboption = comment_list[4].strip().lower()
+                        suboption_list = ['intro', 'outro', 'verse 1',
+                                          'verse 2', 'verse 3', 'verse 4',
+                                          'verse 5', 'verse 6', 'verse 7',
+                                          'verse 8', 'verse 9', 'verse 10',
+                                          'interlude', 'bridge', 'chorus']
+                        if suboption not in suboption_list:
+                            logging.info('Invalid Option')
+                            print('Invalid Option')
+                            continue
+
                 except IndexError:
                     logging.info('Invalid comment format')
                     print('Invalid comment format')
@@ -78,7 +92,11 @@ def main():
                 # Check if the json file is present in the lyrics directory.
                 if os.path.isfile(dest_path):
                     if option == 'lyrics':
-                        post_lyrics(dest_path, comment)
+                        if not lyrics_suboption:
+                            post_lyrics(dest_path, comment)
+                        else:
+                            post_sub_lyrics(dest_path, comment,
+                                            lyrics_suboption)
                     elif option == 'short info':
                         post_short_song_info(dest_path, comment)
                     elif option == 'long info':
@@ -120,7 +138,11 @@ def main():
                             continue
 
                         if option == 'lyrics':
-                            post_lyrics(dest_path, comment)
+                            if not lyrics_suboption:
+                                post_lyrics(dest_path, comment)
+                            else:
+                                post_sub_lyrics(dest_path, comment,
+                                                lyrics_suboption)
                         elif option == 'short info':
                             post_short_song_info(dest_path, comment)
                         elif option == 'long info':
