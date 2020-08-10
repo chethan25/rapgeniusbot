@@ -60,17 +60,24 @@ def main():
                         print('Invalid Option')
                         continue
 
-                    lyrics_suboption = ''
+                    lyrics_suboptions = ''
                     if option == 'lyrics':
-                        lyrics_suboption = comment_list[4].strip().lower()
-                        suboption_list = ['intro', 'outro', 'verse 1',
-                                          'verse 2', 'verse 3', 'verse 4',
-                                          'verse 5', 'verse 6', 'verse 7',
-                                          'verse 8', 'verse 9', 'verse 10',
-                                          'interlude', 'bridge', 'chorus']
-                        if suboption not in suboption_list:
-                            logging.info('Invalid Option')
-                            print('Invalid Option')
+                        lyrics_suboptions = comment_list[4].strip(
+                        ).lower().split()
+                        suboptions_list = ['intro', 'outro', 'verse1',
+                                           'verse2', 'verse3', 'verse4',
+                                           'verse5', 'verse6', 'verse7',
+                                           'verse8', 'verse9', 'verse10',
+                                           'interlude', 'bridge', 'chorus',
+                                           'hook', 'pre-chorus']
+                        flag = False
+                        for suboption in lyrics_suboptions:
+                            if suboption not in suboptions_list:
+                                logging.info('Invalid Option')
+                                print('Invalid Option')
+                                flag = True
+                                break
+                        if flag == True:
                             continue
 
                 except IndexError:
@@ -92,11 +99,11 @@ def main():
                 # Check if the json file is present in the lyrics directory.
                 if os.path.isfile(dest_path):
                     if option == 'lyrics':
-                        if not lyrics_suboption:
+                        if not lyrics_suboptions:
                             post_lyrics(dest_path, comment)
                         else:
                             post_sub_lyrics(dest_path, comment,
-                                            lyrics_suboption)
+                                            lyrics_suboptions)
                     elif option == 'short info':
                         post_short_song_info(dest_path, comment)
                     elif option == 'long info':
@@ -138,11 +145,11 @@ def main():
                             continue
 
                         if option == 'lyrics':
-                            if not lyrics_suboption:
+                            if not lyrics_suboptions:
                                 post_lyrics(dest_path, comment)
                             else:
                                 post_sub_lyrics(dest_path, comment,
-                                                lyrics_suboption)
+                                                lyrics_suboptions)
                         elif option == 'short info':
                             post_short_song_info(dest_path, comment)
                         elif option == 'long info':
@@ -158,6 +165,67 @@ def post_lyrics(d_path, comment):
             data = json.load(f)
             comment.reply(f"**\"{data.get('title').upper()}\"** **LYRICS**\
                     \n\n---\n\n{data.get('lyrics', 'Lyrics Unavailable')}")
+            add_entry(comment)
+            logging.info('posted')
+            print('posted')
+    except Exception:
+        logging.exception('Exception occurred')
+
+
+def post_sub_lyrics(d_path, comment, section):
+    """Parses json file for songs lyrics and replies part of lyrics to the comment."""
+    try:
+        with open(d_path) as f:
+            data = json.load(f)
+            lyrics = data.get('lyrics', 'Lyrics Unavailable')
+            lyrics_list = lyrics.split('\n\n')
+
+            Intro = ''
+            if 'intro' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Intro' in sub_lyrics:
+                        Intro = sub_lyrics
+            Verse_1 = ''
+            if 'verse1' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 1' in sub_lyrics:
+                        Verse_1 = sub_lyrics
+            Verse_2 = ''
+            if 'verse2' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 2' in sub_lyrics:
+                        Verse_2 = sub_lyrics
+            Verse_3 = ''
+            if 'verse3' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 3' in sub_lyrics:
+                        Verse_3 = sub_lyrics
+            Verse_4 = ''
+            if 'verse4' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 4' in sub_lyrics:
+                        Verse_4 = sub_lyrics
+            Chorus = ''
+            if 'chorus' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Chorus' in sub_lyrics:
+                        Chorus = sub_lyrics
+                        break
+            Hook = ''
+            if 'hook' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Hook' in sub_lyrics:
+                        Hook = sub_lyrics
+                        break
+            Outro = ''
+            if 'outro' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Outro' in sub_lyrics:
+                        Outro = sub_lyrics
+
+            comment.reply(f"**\"{data.get('title').upper()}\"** **LYRICS**\
+                \n\n---\n\n{Intro}\n\n{Verse_1}\n\n{Verse_2}\n\n{Verse_3}\n\n{Verse_4}\n\n{Chorus}\n\n{Hook}\n\n{Outro}")
+
             add_entry(comment)
             logging.info('posted')
             print('posted')
