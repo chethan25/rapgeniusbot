@@ -61,24 +61,27 @@ def main():
                         continue
 
                     lyrics_suboptions = ''
-                    if option == 'lyrics':
-                        lyrics_suboptions = comment_list[4].strip(
-                        ).lower().split()
-                        suboptions_list = ['intro', 'outro', 'verse1',
-                                           'verse2', 'verse3', 'verse4',
-                                           'verse5', 'verse6', 'verse7',
-                                           'verse8', 'verse9', 'verse10',
-                                           'interlude', 'bridge', 'chorus',
-                                           'hook', 'pre-chorus']
-                        flag = False
-                        for suboption in lyrics_suboptions:
-                            if suboption not in suboptions_list:
-                                logging.info('Invalid Option')
-                                print('Invalid Option')
-                                flag = True
-                                break
-                        if flag == True:
-                            continue
+                    try:
+                        if option == 'lyrics':
+                            lyrics_suboptions = comment_list[4].strip(
+                            ).lower().split()
+                            suboptions_list = ['intro', 'outro', 'verse1',
+                                               'verse2', 'verse3', 'verse4',
+                                               'verse5', 'verse6', 'verse7',
+                                               'verse8', 'verse9', 'verse10',
+                                               'interlude', 'bridge', 'chorus',
+                                               'hook', 'pre-chorus']
+                            flag = False
+                            for suboption in lyrics_suboptions:
+                                if suboption not in suboptions_list:
+                                    logging.info('Invalid Option')
+                                    print('Invalid Option')
+                                    flag = True
+                                    break
+                            if flag == True:
+                                continue
+                    except IndexError:
+                        pass
 
                 except IndexError:
                     logging.info('Invalid comment format')
