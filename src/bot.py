@@ -89,7 +89,7 @@ def main():
                     continue
 
                 new_artist_name = artist_name.replace(
-                    " ", "").replace("'", "").replace("-", "").replace('"', "")
+                    " ", "").replace("'", "").replace("-", "").replace('"', "").replace("&", "")
                 new_song_name = song_name.replace(" ", "").replace(
                     "'", "").replace("(", "").replace(")", "").replace("&", "")
 
@@ -208,6 +208,36 @@ def post_sub_lyrics(d_path, comment, section):
                 for sub_lyrics in lyrics_list:
                     if 'Verse 4' in sub_lyrics:
                         Verse_4 = sub_lyrics
+            Verse_5 = ''
+            if 'verse5' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 5' in sub_lyrics:
+                        Verse_5 = sub_lyrics
+            Verse_6 = ''
+            if 'verse6' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 6' in sub_lyrics:
+                        Verse_6 = sub_lyrics
+            Verse_7 = ''
+            if 'verse7' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 7' in sub_lyrics:
+                        Verse_7 = sub_lyrics
+            Verse_8 = ''
+            if 'verse8' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 8' in sub_lyrics:
+                        Verse_8 = sub_lyrics
+            Verse_9 = ''
+            if 'verse9' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 9' in sub_lyrics:
+                        Verse_9 = sub_lyrics
+            Verse_10 = ''
+            if 'verse10' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 10' in sub_lyrics:
+                        Verse_10 = sub_lyrics
             Chorus = ''
             if 'chorus' in section:
                 for sub_lyrics in lyrics_list:
@@ -220,6 +250,18 @@ def post_sub_lyrics(d_path, comment, section):
                     if 'Hook' in sub_lyrics:
                         Hook = sub_lyrics
                         break
+            Interlude = ''
+            if 'interlude' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Interlude' in sub_lyrics:
+                        Interlude = sub_lyrics
+                        break
+            Bridge = ''
+            if 'bridge' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Bridge' in sub_lyrics:
+                        Bridge = sub_lyrics
+                        break
             Outro = ''
             if 'outro' in section:
                 for sub_lyrics in lyrics_list:
@@ -227,7 +269,10 @@ def post_sub_lyrics(d_path, comment, section):
                         Outro = sub_lyrics
 
             comment.reply(f"**\"{data.get('title').upper()}\"** **LYRICS**\
-                \n\n---\n\n{Intro}\n\n{Verse_1}\n\n{Verse_2}\n\n{Verse_3}\n\n{Verse_4}\n\n{Chorus}\n\n{Hook}\n\n{Outro}")
+                \n\n---\n\n{Intro}\n\n{Verse_1}\n\n{Chorus}\n\n{Hook}\
+                \n\n{Bridge}\n\n{Interlude}\n\n{Verse_2}\n\n{Verse_3}\
+                \n\n{Verse_4}\n\n{Verse_5}\n\n{Verse_6}\n\n{Verse_7}\
+                \n\n{Verse_8}\n\n{Verse_9}\n\n{Verse_10}\n\n{Outro}")
 
             add_entry(comment)
             logging.info('posted')
