@@ -70,7 +70,8 @@ def main():
                                                'verse5', 'verse6', 'verse7',
                                                'verse8', 'verse9', 'verse10',
                                                'interlude', 'bridge', 'chorus',
-                                               'hook', 'pre-chorus']
+                                               'hook', 'pre-chorus', 'break',
+                                               'refrain', 'post-chorus', 'collision']
                             flag = False
                             for suboption in lyrics_suboptions:
                                 if suboption not in suboptions_list:
@@ -238,11 +239,35 @@ def post_sub_lyrics(d_path, comment, section):
                 for sub_lyrics in lyrics_list:
                     if 'Verse 10' in sub_lyrics:
                         Verse_10 = sub_lyrics
+            Pre_Chorus = ''
+            if 'pre-chorus' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Pre-Chorus' in sub_lyrics:
+                        Pre_Chorus = sub_lyrics
+                        break
             Chorus = ''
             if 'chorus' in section:
                 for sub_lyrics in lyrics_list:
                     if 'Chorus' in sub_lyrics:
                         Chorus = sub_lyrics
+                        break
+            Post_Chorus = ''
+            if 'post-chorus' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Post-Chorus' in sub_lyrics:
+                        Post_Chorus = sub_lyrics
+                        break
+            Refrain = ''
+            if 'refrain' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Refrain' in sub_lyrics:
+                        Refrain = sub_lyrics
+                        break
+            Collision = ''
+            if 'collision' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Collision' in sub_lyrics:
+                        Collision = sub_lyrics
                         break
             Hook = ''
             if 'hook' in section:
@@ -262,6 +287,12 @@ def post_sub_lyrics(d_path, comment, section):
                     if 'Bridge' in sub_lyrics:
                         Bridge = sub_lyrics
                         break
+            Break = ''
+            if 'break' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Break' in sub_lyrics:
+                        Break = sub_lyrics
+                        break
             Outro = ''
             if 'outro' in section:
                 for sub_lyrics in lyrics_list:
@@ -269,8 +300,10 @@ def post_sub_lyrics(d_path, comment, section):
                         Outro = sub_lyrics
 
             comment.reply(f"**\"{data.get('title').upper()}\"** **LYRICS**\
-                \n\n---\n\n{Intro}\n\n{Verse_1}\n\n{Chorus}\n\n{Hook}\
-                \n\n{Bridge}\n\n{Interlude}\n\n{Verse_2}\n\n{Verse_3}\
+                \n\n---\n\n{Intro}\n\n{Verse_1}\n\n{Pre_Chorus}\n\n{Chorus}\
+                \n\n{Post_Chorus}\n\n{Hook}\n\n{Refrain}\n\n{Collision}\
+                \n\n{Bridge}\
+                \n\n{Break}\n\n{Interlude}\n\n{Verse_2}\n\n{Verse_3}\
                 \n\n{Verse_4}\n\n{Verse_5}\n\n{Verse_6}\n\n{Verse_7}\
                 \n\n{Verse_8}\n\n{Verse_9}\n\n{Verse_10}\n\n{Outro}")
 
