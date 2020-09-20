@@ -69,6 +69,7 @@ def main():
                                                'verse2', 'verse3', 'verse4',
                                                'verse5', 'verse6', 'verse7',
                                                'verse8', 'verse9', 'verse10',
+                                               'verse11', 'verse12', 'verse13',
                                                'interlude', 'bridge', 'chorus',
                                                'hook', 'pre-chorus', 'break',
                                                'refrain', 'post-chorus', 'collision']
@@ -239,6 +240,21 @@ def post_sub_lyrics(d_path, comment, section):
                 for sub_lyrics in lyrics_list:
                     if 'Verse 10' in sub_lyrics:
                         Verse_10 = sub_lyrics
+            Verse_11 = ''
+            if 'verse11' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 11' in sub_lyrics:
+                        Verse_11 = sub_lyrics
+            Verse_12 = ''
+            if 'verse12' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 12' in sub_lyrics:
+                        Verse_12 = sub_lyrics
+            Verse_13 = ''
+            if 'verse13' in section:
+                for sub_lyrics in lyrics_list:
+                    if 'Verse 13' in sub_lyrics:
+                        Verse_13 = sub_lyrics
             Pre_Chorus = ''
             if 'pre-chorus' in section:
                 for sub_lyrics in lyrics_list:
@@ -305,7 +321,8 @@ def post_sub_lyrics(d_path, comment, section):
                 \n\n{Bridge}\
                 \n\n{Break}\n\n{Interlude}\n\n{Verse_2}\n\n{Verse_3}\
                 \n\n{Verse_4}\n\n{Verse_5}\n\n{Verse_6}\n\n{Verse_7}\
-                \n\n{Verse_8}\n\n{Verse_9}\n\n{Verse_10}\n\n{Outro}")
+                \n\n{Verse_8}\n\n{Verse_9}\n\n{Verse_10}\n\n{Verse_11}\
+                \n\n{Verse_12}\n\n{Verse_13}\n\n{Outro}")
 
             add_entry(comment)
             logging.info('posted')
