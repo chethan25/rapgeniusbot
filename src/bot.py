@@ -46,7 +46,7 @@ def main():
         # Check if bot has already replied to the comment.
         if not is_added(comment):
             # Check if bots username is present in the comment.
-            if str(reddit.user.me()) in comment.body:
+            if 'geniusbot' in comment.body:
                 # Parse comments for song name, artist name and option.
                 comment_list = comment.body.split(',')
                 try:
