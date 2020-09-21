@@ -213,7 +213,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_1.split('\n')
                     Verse_1 = bars_list[beg:end]
-                    Verse_1 = '\n\n'.join(Verse_1)
+                    Verse_1 = bars_list[0] + ' ' + '\n\n'.join(Verse_1)
             Verse_2 = ''
             if 'verse2' in section:
                 for sub_lyrics in lyrics_list:
@@ -228,7 +228,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_2.split('\n')
                     Verse_2 = bars_list[beg:end]
-                    Verse_2 = '\n\n'.join(Verse_2)
+                    Verse_2 = bars_list[0] + ' ' + '\n\n'.join(Verse_2)
             Verse_3 = ''
             if 'verse3' in section:
                 for sub_lyrics in lyrics_list:
@@ -243,7 +243,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_3.split('\n')
                     Verse_3 = bars_list[beg:end]
-                    Verse_3 = '\n\n'.join(Verse_3)
+                    Verse_3 = bars_list[0] + ' ' + '\n\n'.join(Verse_3)
             Verse_4 = ''
             if 'verse4' in section:
                 for sub_lyrics in lyrics_list:
@@ -258,7 +258,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_4.split('\n')
                     Verse_4 = bars_list[beg:end]
-                    Verse_4 = '\n\n'.join(Verse_4)
+                    Verse_4 = bars_list[0] + ' ' + '\n\n'.join(Verse_4)
             Verse_5 = ''
             if 'verse5' in section:
                 for sub_lyrics in lyrics_list:
@@ -273,7 +273,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_5.split('\n')
                     Verse_5 = bars_list[beg:end]
-                    Verse_5 = '\n\n'.join(Verse_5)
+                    Verse_5 = bars_list[0] + ' ' + '\n\n'.join(Verse_5)
             Verse_6 = ''
             if 'verse6' in section:
                 for sub_lyrics in lyrics_list:
@@ -288,7 +288,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_6.split('\n')
                     Verse_6 = bars_list[beg:end]
-                    Verse_6 = '\n\n'.join(Verse_6)
+                    Verse_6 = bars_list[0] + ' ' + '\n\n'.join(Verse_6)
             Verse_7 = ''
             if 'verse7' in section:
                 for sub_lyrics in lyrics_list:
@@ -303,7 +303,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_7.split('\n')
                     Verse_7 = bars_list[beg:end]
-                    Verse_7 = '\n\n'.join(Verse_7)
+                    Verse_7 = bars_list[0] + ' ' + '\n\n'.join(Verse_7)
             Verse_8 = ''
             if 'verse8' in section:
                 for sub_lyrics in lyrics_list:
@@ -318,7 +318,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_8.split('\n')
                     Verse_8 = bars_list[beg:end]
-                    Verse_8 = '\n\n'.join(Verse_8)
+                    Verse_8 = bars_list[0] + ' ' + '\n\n'.join(Verse_8)
             Verse_9 = ''
             if 'verse9' in section:
                 for sub_lyrics in lyrics_list:
@@ -333,7 +333,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_9.split('\n')
                     Verse_9 = bars_list[beg:end]
-                    Verse_9 = '\n\n'.join(Verse_9)
+                    Verse_9 = bars_list[0] + ' ' + '\n\n'.join(Verse_9)
             Verse_10 = ''
             if 'verse10' in section:
                 for sub_lyrics in lyrics_list:
@@ -348,7 +348,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_10.split('\n')
                     Verse_10 = bars_list[beg:end]
-                    Verse_10 = '\n\n'.join(Verse_10)
+                    Verse_10 = bars_list[0] + ' ' + '\n\n'.join(Verse_10)
             Verse_11 = ''
             if 'verse11' in section:
                 for sub_lyrics in lyrics_list:
@@ -363,7 +363,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_11.split('\n')
                     Verse_11 = bars_list[beg:end]
-                    Verse_11 = '\n\n'.join(Verse_11)
+                    Verse_11 = bars_list[0] + ' ' + '\n\n'.join(Verse_11)
             Verse_12 = ''
             if 'verse12' in section:
                 for sub_lyrics in lyrics_list:
@@ -378,7 +378,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_12.split('\n')
                     Verse_12 = bars_list[beg:end]
-                    Verse_12 = '\n\n'.join(Verse_12)
+                    Verse_12 = bars_list[0] + ' ' + '\n\n'.join(Verse_12)
             Verse_13 = ''
             if 'verse13' in section:
                 for sub_lyrics in lyrics_list:
@@ -393,7 +393,7 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
                         end += 1
                     bars_list = Verse_13.split('\n')
                     Verse_13 = bars_list[beg:end]
-                    Verse_13 = '\n\n'.join(Verse_13)
+                    Verse_13 = bars_list[0] + ' ' + '\n\n'.join(Verse_13)
             Pre_Chorus = ''
             if 'pre-chorus' in section:
                 for sub_lyrics in lyrics_list:
