@@ -45,10 +45,10 @@ def main():
     for comment in reddit.subreddit('lukerken').stream.comments(skip_existing=True):
         # Check if bot has already replied to the comment.
         if not is_added(comment):
+            # Parse comments for song name, artist name and option.
+            comment_list = comment.body.split(',')
             # Check if bots username is present in the comment.
-            if 'geniusbot' in comment.body:
-                # Parse comments for song name, artist name and option.
-                comment_list = comment.body.split(',')
+            if comment_list[0].strip().lower() == 'geniusbot':
                 try:
                     artist_name = comment_list[1].strip().lower()
                     song_name = comment_list[2].strip().lower()
