@@ -29,7 +29,7 @@ def main():
     """
     # Configuring PRAW.
     reddit = praw.Reddit(
-        'rapgeniusbot', user_agent='rapgeniusbot v1.0 by /u/killuminati07')
+        'rapgeniusbot', user_agent='rapgenius v1.0 by /u/killuminati07')
 
     # Authorize access to the genius api using client access token.
     genius = lyricsgenius.Genius(os.environ.get('GENIUS_TOKEN'))
