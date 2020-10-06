@@ -35,14 +35,14 @@ def main():
     genius = lyricsgenius.Genius(os.environ.get('GENIUS_TOKEN'))
 
     # Configure logger
-    logging.basicConfig(filename='bot.log', filemode='w',
+    logging.basicConfig(filename='bot.log',
                         format='%(asctime)s - %(levelname)s - %(message)s',
                         level=logging.INFO)
 
     logging.info('logging in')
 
     # Get the latest comments from the subreddit.
-    for comment in reddit.subreddit('lukerken').stream.comments(skip_existing=True):
+    for comment in reddit.subreddit('Eminem+Tupac').stream.comments():
         # Check if bot has already replied to the comment.
         if not is_added(comment):
             # Parse comments for song name, artist name and option.
@@ -57,7 +57,6 @@ def main():
                                    'long info', 'relations']
                     if option not in option_list:
                         logging.info('Invalid Option')
-                        print('Invalid Option')
                         continue
 
                     lyrics_suboptions = ''
@@ -77,7 +76,6 @@ def main():
                             for suboption in lyrics_suboptions:
                                 if suboption not in suboptions_list:
                                     logging.info('Invalid Option')
-                                    print('Invalid Option')
                                     flag = True
                                     break
                             if flag == True:
@@ -96,7 +94,6 @@ def main():
 
                 except IndexError:
                     logging.info('Invalid comment format')
-                    print('Invalid comment format')
                     continue
 
                 new_artist_name = artist_name.replace(
@@ -133,7 +130,6 @@ def main():
                                            get_full_info=True).save_lyrics()
                     except AttributeError:
                         logging.info("Invalid Song Request")
-                        print('Invalid Song Request')
                         continue
                     else:
                         for filename in os.listdir('.'):
@@ -155,7 +151,6 @@ def main():
                             shutil.move(filename, dest_path)
                         except FileNotFoundError:
                             logging.info('Invalid Song Request')
-                            print('Invalid Song Request')
                             continue
 
                         if option == 'lyrics':
@@ -181,7 +176,6 @@ def post_lyrics(d_path, comment):
                     \n\n---\n\n{data.get('lyrics', 'Lyrics Unavailable')}")
             add_entry(comment)
             logging.info('posted')
-            print('posted')
     except Exception:
         logging.exception('Exception occurred')
 
@@ -505,7 +499,6 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
 
             add_entry(comment)
             logging.info('posted')
-            print('posted')
     except Exception:
         logging.exception('Exception occurred')
 
@@ -553,7 +546,6 @@ def post_short_song_info(d_path, comment):
                 \n\n**Description** - {description}")
         add_entry(comment)
         logging.info('posted')
-        print('posted')
     except Exception:
         logging.exception('Exception occurred')
 
@@ -593,7 +585,6 @@ def post_long_song_info(d_path, comment):
                 \n\n{custom_performance_str}\n\n**Recorded At** - {recorded_at}")
         add_entry(comment)
         logging.info('posted')
-        print('posted')
     except Exception:
         logging.exception('Exception occurred')
 
@@ -622,7 +613,6 @@ def post_song_relations(d_path, comment):
                 \n\n---\n\n{song_relationships_str}")
         add_entry(comment)
         logging.info('posted')
-        print('posted')
     except Exception:
         logging.exception('Exception occurred')
 
@@ -640,7 +630,6 @@ def add_entry(comment_id):
     """Adds comment id to the database if it wasn't already in the database."""
     if not is_added(comment_id):
         logging.info(f"Adding {comment_id}")
-        print(f"Adding {comment_id}")
         db.Comments(cid=comment_id).save()
 
 
@@ -657,28 +646,20 @@ if __name__ == "__main__":
             main()
         except prawcore.exceptions.RequestException:
             logging.error("Error with the incomplete HTTP request")
-            print("Error with the incomplete HTTP request")
         except prawcore.exceptions.ResponseException:
             logging.error("Error with the completed HTTP request")
-            print("Error with the completed HTTP request")
         except prawcore.exceptions.OAuthException:
             logging.error("OAuth2 related error with the request")
-            print("OAuth2 related error with the request")
         except prawcore.exceptions.PrawcoreException as prawcoreerr:
             logging.error(prawcoreerr)
-            print(prawcoreerr)
         except praw.exceptions.RedditAPIException as exception:
             logging.error(exception)
-            print(exception)
         except praw.exceptions.ClientException as clienterr:
             logging.error(clienterr)
-            print(clienterr)
         except praw.exceptions.PRAWException as prawerr:
             logging.error(prawerr)
-            print(prawerr)
         except Exception as err:
             logging.error(err)
-            print(err)
 
         logging.info("Retrying in 5 minutes")
         time.sleep(60 * 5)
