@@ -166,6 +166,8 @@ def main():
                         elif option == 'relations':
                             post_song_relations(dest_path, comment)
 
+                time.sleep(30)
+
 
 def post_lyrics(d_path, comment):
     """Parses json file for songs lyrics and replies lyrics to the comment."""
