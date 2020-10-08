@@ -75,7 +75,7 @@ def main():
                             flag = False
                             for suboption in lyrics_suboptions:
                                 if suboption not in suboptions_list:
-                                    logging.info('Invalid Option')
+                                    logging.info('Invalid Suboption (Section)')
                                     flag = True
                                     break
                             if flag == True:
@@ -166,8 +166,6 @@ def main():
                         elif option == 'relations':
                             post_song_relations(dest_path, comment)
 
-                time.sleep(30)
-
 
 def post_lyrics(d_path, comment):
     """Parses json file for songs lyrics and replies lyrics to the comment."""
@@ -178,6 +176,7 @@ def post_lyrics(d_path, comment):
                     \n\n---\n\n{data.get('lyrics', 'Lyrics Unavailable')}")
             add_entry(comment)
             logging.info('posted')
+            time.sleep(10)
     except Exception:
         logging.exception('Exception occurred')
 
@@ -501,6 +500,9 @@ def post_sub_lyrics(d_path, comment, section, beg, end):
 
             add_entry(comment)
             logging.info('posted')
+            time.sleep(10)
+    except ValueError:
+        logging.info('Invalid Suboption (Bar)')
     except Exception:
         logging.exception('Exception occurred')
 
@@ -548,6 +550,7 @@ def post_short_song_info(d_path, comment):
                 \n\n**Description** - {description}")
         add_entry(comment)
         logging.info('posted')
+        time.sleep(10)
     except Exception:
         logging.exception('Exception occurred')
 
@@ -587,6 +590,7 @@ def post_long_song_info(d_path, comment):
                 \n\n{custom_performance_str}\n\n**Recorded At** - {recorded_at}")
         add_entry(comment)
         logging.info('posted')
+        time.sleep(10)
     except Exception:
         logging.exception('Exception occurred')
 
@@ -615,6 +619,7 @@ def post_song_relations(d_path, comment):
                 \n\n---\n\n{song_relationships_str}")
         add_entry(comment)
         logging.info('posted')
+        time.sleep(10)
     except Exception:
         logging.exception('Exception occurred')
 
