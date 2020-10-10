@@ -42,7 +42,7 @@ def main():
     logging.info('logging in')
 
     # Get the latest comments from the subreddit.
-    for comment in reddit.subreddit('Eminem+Tupac').stream.comments():
+    for comment in reddit.subreddit('Eminem+Tupac+hiphop101+hiphop+hiphopheads').stream.comments():
         # Check if bot has already replied to the comment.
         if not is_added(comment):
             # Parse comments for song name, artist name and option.
